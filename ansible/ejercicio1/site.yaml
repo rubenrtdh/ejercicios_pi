@@ -1,30 +1,33 @@
 - hosts: all
   become: true
   tasks:
-      # Actualizamos paquetes
+    # Actualizamos paquetes
     - name: Actualizamos el sistema
       apt: update_cache=yes upgrade=yes
-      # Instalar paquetes
+
+    # Instalar paquetes
     - name: "Instalar paquetes con apt"
       apt:
         name: "{{ item }}"
         state: present
       loop:
-        # Aquí tienes que poner los paquetes que quieres instalar
-      # Copia un fichero a la máquina remota
+        - git
+        - apache2
+
+    # Copia un fichero a la máquina remota
     - name: "Copiar fichero a la máquina remota"
       copy:
         src: files/foo.conf
-        dest:
+        dest: /etc/foo.conf
         owner: root
         group: root
         mode: '0644'
 
-      # Copia un template a un fichero
+    # Copia un template a un fichero
     - name: "Copiar un template a un fichero de la máquina remota"
       template:
         src: templates/index.j2
-        dest:
+        dest: /var/www/html/index.html
         owner: www-data
         group: www-data
         mode: 0644
